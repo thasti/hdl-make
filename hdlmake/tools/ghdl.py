@@ -48,8 +48,8 @@ class ToolGHDL(ToolSim):
                      'mrproper': ["*.vcd"]}
 
     SIMULATOR_CONTROLS = {'vlog': None,
-                          'vhdl': 'ghdl -a $(GHDL_OPT) $<',
-                          'compiler': 'ghdl -e $(GHDL_OPT) $(TOP_MODULE)'}
+                          'vhdl': 'ghdl -a $(GHDL_OPT) $(GHDL_ANALYZE_OPT) $<',
+                          'compiler': 'ghdl -e $(GHDL_OPT) $(GHDL_ELABORATE_OPT) $(TOP_MODULE)'}
 
     def __init__(self):
         super(ToolGHDL, self).__init__()
@@ -61,11 +61,15 @@ class ToolGHDL(ToolSim):
 
     def _makefile_sim_options(self):
         """Print the GHDL options to the Makefile"""
-        ghdl_opt = self.manifest_dict.get("ghdl_opt", '')
-        ghdl_string = string.Template(
-            """GHDL_OPT := ${ghdl_opt}\n""")
-        self.writeln(ghdl_string.substitute(
-            ghdl_opt=ghdl_opt))
+        sim_options = [("GHDL_OPT", "ghdl_opt"),
+                       ("GHDL_ANALYZE_OPT", "ghdl_analyze_opt"),
+                       ("GHDL_ELABORATE_OPT", "ghdl_elaborate_opt")]
+        for sim_option in sim_options:
+            ghdl_opt = self.manifest_dict.get(sim_option[1], '')
+            ghdl_string = string.Template(
+                sim_option[0] + """ := ${ghdl_opt}\n""")
+            self.writeln(ghdl_string.substitute(
+                ghdl_opt=ghdl_opt))
 
     def _makefile_sim_compilation(self):
         """Print the GDHL simulation compilation target"""

@@ -244,6 +244,16 @@ class ManifestParser(ConfigParser):
             default="",
             help="Additional options for GHDL",
             type='')
+        self.add_option(
+            'ghdl_analyze_opt',
+            default="",
+            help="Additional analysis-only options for GHDL",
+            type='')
+        self.add_option(
+            'ghdl_elaborate_opt',
+            default="",
+            help="Additional elaboration-only options for GHDL",
+            type='')
         self.add_delimiter()
 
     def add_option_list(self, option_list):
