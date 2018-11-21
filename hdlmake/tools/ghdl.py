@@ -48,8 +48,8 @@ class ToolGHDL(ToolSim):
                      'mrproper': ["*.vcd"]}
 
     SIMULATOR_CONTROLS = {'vlog': None,
-                          'vhdl': 'ghdl -a $<',
-                          'compiler': 'ghdl -e $(TOP_MODULE)'}
+                          'vhdl': 'ghdl -a $(GHDL_OPT) $<',
+                          'compiler': 'ghdl -e $(GHDL_OPT) $(TOP_MODULE)'}
 
     def __init__(self):
         super(ToolGHDL, self).__init__()
